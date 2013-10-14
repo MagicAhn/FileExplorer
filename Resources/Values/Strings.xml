@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="Hello">Hello World, Click Me!</string>
+  <string name="ApplicationName">FileExplorer</string>
+  <string name="DirCanNotRead">没有此文件夹的访问权限</string>
+  <string name="BackPressAgainToExit">再点击一次后退键退出程序</string>
+  <string name="ActivityNotFound">找不到这个文件的关联打开程序</string>
+  <string name="MKDIR">新建</string>
+  <string name="REFRESH">刷新</string>
+  <string name="BATCHREMOVE">删除</string>
+</resources>
