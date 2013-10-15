@@ -122,8 +122,14 @@ namespace FileExplorer
 			// aapt resource value: 0x7f040003
 			public const int BackPressAgainToExit = 2130968579;
 			
+			// aapt resource value: 0x7f040009
+			public const int ConfirmBatchRemove = 2130968585;
+			
 			// aapt resource value: 0x7f040002
 			public const int DirCanNotRead = 2130968578;
+			
+			// aapt resource value: 0x7f04000c
+			public const int Favorite = 2130968588;
 			
 			// aapt resource value: 0x7f040000
 			public const int Hello = 2130968576;
@@ -133,6 +139,15 @@ namespace FileExplorer
 			
 			// aapt resource value: 0x7f040006
 			public const int REFRESH = 2130968582;
+			
+			// aapt resource value: 0x7f04000a
+			public const int Remove = 2130968586;
+			
+			// aapt resource value: 0x7f04000b
+			public const int Rename = 2130968587;
+			
+			// aapt resource value: 0x7f040008
+			public const int Warn = 2130968584;
 			
 			static String()
 			{

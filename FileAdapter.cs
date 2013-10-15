@@ -65,7 +65,10 @@ namespace FileExplorer
 
         private void ChkSelectedOnCheckedChange(object sender, CompoundButton.CheckedChangeEventArgs checkedChangeEventArgs)
         {
-
+            CheckBox chkBox = sender as CheckBox;
+            Int32 position = (Int32)chkBox.Tag;
+            // 当用户点击 CheckBox的时候，更新listView 中的一行的 选中状态
+            listView.SetItemChecked(position,chkBox.Checked);
         }
     }
 }

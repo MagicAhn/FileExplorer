@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace FileExplorer
 {
-    class FileSystemItem
+    class FileSystemItem : Java.Lang.Object
     {
         public String Path { get; set; }//文件全路径 /sdcard/1.txt
         public String Name { get; set; }//1.txt

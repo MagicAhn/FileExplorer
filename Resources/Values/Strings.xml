@@ -8,4 +8,9 @@
   <string name="MKDIR">新建</string>
   <string name="REFRESH">刷新</string>
   <string name="BATCHREMOVE">删除</string>
+  <string name="Warn">警告</string>
+  <string name="ConfirmBatchRemove">你确定要删除这些文件吗？</string>
+  <string name="Remove">删除</string>
+  <string name="Rename">重命名</string>
+  <string name="Favorite">添加至收藏夹</string>
 </resources>
