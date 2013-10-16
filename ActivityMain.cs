@@ -23,7 +23,8 @@ namespace FileExplorer
         private const Int32 BATCHREMOVE = 2;
         private const Int32 REMOVE = 3;
         private const Int32 RENAME = 4;
-        private const Int32 FAVORITE = 5;
+        private const Int32 ADDFAVORITE = 5;
+        private const Int32 VIEWFAVORITE = 6;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -65,48 +66,55 @@ namespace FileExplorer
                 {
                     var fileAdapter = (FileAdapter)_listViewFile.Adapter;
                     var fileSystemItem = fileAdapter.GetItem(args.Position);
-                    if (fileSystemItem.IsDir)
-                    {
-                        var file = new Java.IO.File(fileSystemItem.Path);
-                        //判断是否有权限
-                        if (!file.CanRead())
-                        {
-                            Toast.MakeText(this, Resource.String.DirCanNotRead, ToastLength.Short).Show();
-                            return; //有 return 就不需要 else 了
-                        }
-                        //加载点击的文件夹
-                        LoadDir(fileSystemItem.Path);
-                    }
-                    else
-                    {
-                        // 获取文件的 mimeType
-                        //String mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(
-                        //    MimeTypeMap.GetFileExtensionFromUrl(fileSystemItem.Path));
-                        String mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(MimeTypeMap.GetFileExtensionFromUrl(GetExtension(fileSystemItem.Path)));
-                        // 如果匹配不到，则返回 null
-                        if (mimeType == null)
-                        {
-                            mimeType = "*/*";
-                        }
-                        var intent = new Intent();
-                        //intent.SetAction(Intent.ActionView);
-                        //intent.SetDataAndType(Android.Net.Uri.Parse("file://" + fileSystemItem.Path), mimeType);
-
-                        // 不能单独设置 SetData和SetType，否则会报错 ActivityNotFoundException
-                        // 因为 SetData 是设置Data把Type清零，SetType 是设置Type把Data清零，SetDataAndType才是同时设置
-                        intent.SetAction(Intent.ActionView)
-                            .SetDataAndType(Android.Net.Uri.Parse("file://" + fileSystemItem.Path), mimeType);
-                        try
-                        {
-                            StartActivity(intent);
-                        }
-                        catch (ActivityNotFoundException e)
-                        {
-                            Toast.MakeText(this, Resource.String.ActivityNotFound, ToastLength.Short).Show();
-                        }
-                    }
+                    OpenFileSystemItem(fileSystemItem);
                 };
             #endregion
+        }
+
+        private void OpenFileSystemItem(FileSystemItem fileSystemItem)
+        {
+            if (fileSystemItem.IsDir)
+            {
+                var file = new Java.IO.File(fileSystemItem.Path);
+                //判断是否有权限
+                if (!file.CanRead())
+                {
+                    Toast.MakeText(this, Resource.String.DirCanNotRead, ToastLength.Short).Show();
+                    return;
+                }
+                //加载点击的文件夹
+                LoadDir(fileSystemItem.Path);
+            }
+            else
+            {
+                // 获取文件的 mimeType
+                //String mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(
+                //    MimeTypeMap.GetFileExtensionFromUrl(fileSystemItem.Path));
+                String mimeType =
+                    MimeTypeMap.Singleton.GetMimeTypeFromExtension(
+                        MimeTypeMap.GetFileExtensionFromUrl(GetExtension(fileSystemItem.Path)));
+                // 如果匹配不到，则返回 null
+                if (mimeType == null)
+                {
+                    mimeType = "*/*";
+                }
+                var intent = new Intent();
+                //intent.SetAction(Intent.ActionView);
+                //intent.SetDataAndType(Android.Net.Uri.Parse("file://" + fileSystemItem.Path), mimeType);
+
+                // 不能单独设置 SetData和SetType，否则会报错 ActivityNotFoundException
+                // 因为 SetData 是设置Data把Type清零，SetType 是设置Type把Data清零，SetDataAndType才是同时设置
+                intent.SetAction(Intent.ActionView)
+                    .SetDataAndType(Android.Net.Uri.Parse("file://" + fileSystemItem.Path), mimeType);
+                try
+                {
+                    StartActivity(intent);
+                }
+                catch (ActivityNotFoundException e)
+                {
+                    Toast.MakeText(this, Resource.String.ActivityNotFound, ToastLength.Short).Show();
+                }
+            }
         }
 
         private void LoadDir(string dirToLoad)
@@ -160,6 +168,7 @@ namespace FileExplorer
             menu.Add(0, MKDIR, 0, Resource.String.MKDIR);
             menu.Add(0, REFRESH, 0, Resource.String.REFRESH);
             menu.Add(0, BATCHREMOVE, 0, Resource.String.BATCHREMOVE);
+            menu.Add(0, VIEWFAVORITE, 0, Resource.String.ViewFavorite);
 
             return true;
         }
@@ -196,6 +205,34 @@ namespace FileExplorer
             else if (item.ItemId == BATCHREMOVE)
             {
                 RemoveItem();
+            }
+            else if (item.ItemId == VIEWFAVORITE)
+            {
+                var favoriteBuilder = new AlertDialog.Builder(this);
+
+                var adapter = new FavoriteItemAdapter(this);
+                using (DbHelper db = new DbHelper(this))
+                {
+                    foreach (var favoriteItem in db.GetItems())
+                    {
+                        adapter.Add(favoriteItem);
+                    }
+                }
+
+                favoriteBuilder.SetTitle(Resource.String.ViewFavorite).SetSingleChoiceItems(adapter, -1,
+                    (sender, args) =>
+                    {
+                        var dialog = (AlertDialog) sender;
+                        dialog.Cancel();//关闭对话框
+
+                        Int32 position = dialog.ListView.CheckedItemPosition;
+
+                        //dlg.ListView就是AlertDialog显示多条数据使用的ListView
+                        var  anotherAdapter = (FavoriteItemAdapter)dialog.ListView.Adapter;
+                        var fileSystemItem = anotherAdapter.GetItem(position);
+
+                        OpenFileSystemItem(fileSystemItem);
+                    }).Show();
             }
 
             return true;
@@ -242,7 +279,7 @@ namespace FileExplorer
         {
             menu.Add(0, REMOVE, 0, Resource.String.Remove);
             menu.Add(0, RENAME, 0, Resource.String.Rename);
-            menu.Add(0, FAVORITE, 0, Resource.String.Favorite);
+            menu.Add(0, ADDFAVORITE, 0, Resource.String.Favorite);
         }
         #endregion
 
@@ -298,6 +335,17 @@ namespace FileExplorer
                         LoadDir(_editDir.Text);
                     }).SetNegativeButton(Android.Resource.String.Cancel, (IDialogInterfaceOnClickListener)null)
                     .Show();
+            }
+            else if (item.ItemId == ADDFAVORITE)
+            {
+                var menuinfo = (Android.Widget.AdapterView.AdapterContextMenuInfo)item.MenuInfo;
+                FileAdapter adapter = (FileAdapter)_listViewFile.Adapter;
+                FileSystemItem fileSystemItem = adapter.GetItem(menuinfo.Position);
+
+                using (DbHelper db = new DbHelper(this))
+                {
+                    db.AddToFavorite(fileSystemItem.Path, fileSystemItem.IsDir);
+                }
             }
             return true;
         }

@@ -14,6 +14,7 @@ namespace FileExplorer
 {
     class FileAdapter : ArrayAdapter<FileSystemItem>
     {
+        //因为 CheckBox 要用到 ListView
         private ListView listView;
 
         public FileAdapter(Context context, ListView listView)

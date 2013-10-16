@@ -63,20 +63,20 @@ namespace FileExplorer
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int chkSelected = 2131034112;
+			// aapt resource value: 0x7f050002
+			public const int chkSelected = 2131034114;
 			
 			// aapt resource value: 0x7f050003
 			public const int editDir = 2131034115;
 			
-			// aapt resource value: 0x7f050001
-			public const int imgIcon = 2131034113;
+			// aapt resource value: 0x7f050000
+			public const int imgIcon = 2131034112;
 			
 			// aapt resource value: 0x7f050004
 			public const int listViewFile = 2131034116;
 			
-			// aapt resource value: 0x7f050002
-			public const int txtName = 2131034114;
+			// aapt resource value: 0x7f050001
+			public const int txtName = 2131034113;
 			
 			static Id()
 			{
@@ -92,10 +92,13 @@ namespace FileExplorer
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int layoutFileSystem = 2130903040;
+			public const int layoutFavoriteFileItem = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int Main = 2130903041;
+			public const int layoutFileSystem = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int Main = 2130903042;
 			
 			static Layout()
 			{
@@ -112,6 +115,12 @@ namespace FileExplorer
 			
 			// aapt resource value: 0x7f040004
 			public const int ActivityNotFound = 2130968580;
+			
+			// aapt resource value: 0x7f04000e
+			public const int AddToFavoriteExist = 2130968590;
+			
+			// aapt resource value: 0x7f04000d
+			public const int AddToFavoriteSuccess = 2130968589;
 			
 			// aapt resource value: 0x7f040001
 			public const int ApplicationName = 2130968577;
@@ -145,6 +154,9 @@ namespace FileExplorer
 			
 			// aapt resource value: 0x7f04000b
 			public const int Rename = 2130968587;
+			
+			// aapt resource value: 0x7f04000f
+			public const int ViewFavorite = 2130968591;
 			
 			// aapt resource value: 0x7f040008
 			public const int Warn = 2130968584;

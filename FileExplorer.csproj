@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivityMain.cs" />
+    <Compile Include="DbHelper.cs" />
+    <Compile Include="FavoriteItemAdapter.cs" />
     <Compile Include="FileAdapter.cs" />
     <Compile Include="FileSystemItem.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -62,6 +64,9 @@
     <AndroidResource Include="Resources\Layout\layoutFileSystem.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\layoutFavoriteFileItem.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
@@ -69,7 +74,9 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml" />
+    <AndroidResource Include="Resources\Values\Strings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />
